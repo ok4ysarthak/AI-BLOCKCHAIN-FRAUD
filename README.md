@@ -96,45 +96,47 @@ Our project moves data from raw analysis to a verifiable on-chain record in a fe
 * [Node.js](https://nodejs.org/en) (version 18+)
 * A crypto wallet like [MetaMask](https://metamask.io/) with some testnet Amoy POL from a [faucet](https://faucet.polygon.technology/).
 
-### 1. Clone the Repository
-``bash
-git clone <repository-url>
-cd <repository-folder>
+1. Clone the Repository
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
 
-### 2. Setup Python Environment
-```bash
-# Create and activate a virtual environment
-python -m venv .venv
-source .venv/bin/activate  # On Windows: .\.venv\Scripts\activate
+2. Setup Python Environment
+   ```
+   # Create and activate a virtual environment
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .\.venv\Scripts\activate
 
-### 3. Install Python packages
-pip install -r requirements.txt
-npm install
+3. Install Python packages
+   ```
+   pip install -r requirements.txt
+   npm install
 
-### 4. Configure Environment Variables
-Create a file named .env in the project root and add the following, replacing the placeholders with your actual credentials
+4. Configure Environment Variables
+   ```
+   Create a file named .env in the project root and add the following, replacing the placeholders with your actual credentials
 
-###Your RPC URL from Infura or Alchemy
-ALCHEMY_API_URL="[https://polygon-amoy.g.alchemy.com/v2/your-api-key](https://polygon-amoy.g.alchemy.com/v2/your-api-key)"
+   ###Your RPC URL from Infura or Alchemy
+   ALCHEMY_API_URL="[https://polygon-amoy.g.alchemy.com/v2/your-api-key](https://polygon-amoy.g.alchemy.com/v2/your-api-key)"
 
-# The private key of your wallet (from MetaMask)
-# WARNING: Keep this secret!
-PRIVATE_KEY="0x..."
+   # The private key of your wallet (from MetaMask)
+   # WARNING: Keep this secret!
+   PRIVATE_KEY="0x..."
 
-### 5. Compile & Deploy Smart Contract
-```bash
-npx hardhat compile
-npx hardhat run script/deploy.js --network amoy
+5. Compile & Deploy Smart Contract
+   ```
+   npx hardhat compile
+   npx hardhat run script/deploy.js --network amoy
 
-After running, copy the deployed contract address and paste it into the CONTRACT_ADDRESS variables in push_to_chain.py and dashboard.py.
+   After running, copy the deployed contract address and paste it into the CONTRACT_ADDRESS variables in push_to_chain.py and dashboard.py.
 
-### 6. Run Backend & AI Scripts
-```bash
-python backend/push_to_chain.py
-### 7. Launch the Dashboard
-```bash
-streamlit run dashboard.py
-Your browser will open with the interactive dashboard!
+6. Run Backend & AI Scripts
+   ```
+   python backend/push_to_chain.py
+7. Launch the Dashboard
+   ```
+   streamlit run dashboard.py
+   Your browser will open with the interactive dashboard!
 
 
 ## 🔭 The Global Vision: From PoC to Protocol
