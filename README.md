@@ -97,7 +97,7 @@ Our project moves data from raw analysis to a verifiable on-chain record in a fe
 * A crypto wallet like [MetaMask](https://metamask.io/) with some testnet Amoy POL from a [faucet](https://faucet.polygon.technology/).
 
 ### 1. Clone the Repository
-```bash
+``bash
 git clone <repository-url>
 cd <repository-folder>
 
