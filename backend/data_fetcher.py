@@ -1,4 +1,3 @@
-# backend/data_fetcher.py
 import pandas as pd
 from tqdm import tqdm
 from web3 import Web3
@@ -16,18 +15,15 @@ def get_raw_block_data(block_number: int):
     Makes a direct RPC call to get the block data as a raw dictionary,
     bypassing web3.py's PoA validation.
     """
-    # The RPC method is 'eth_getBlockByNumber'
-    # Parameters are the block number (in hex) and a boolean for full transaction objects
+
     response = w3.provider.make_request(
         "eth_getBlockByNumber", 
         [hex(block_number), True]
     )
     
-    # The actual block data is in the 'result' key
     if 'result' in response:
         return response['result']
     else:
-        # Raise an error if the node returned an error message
         raise ConnectionError(f"RPC call failed for block {block_number}: {response.get('error')}")
 
 def collect_address_stats(start_block: int, end_block: int, csv_path: str = "data/raw_transactions.csv"):
@@ -53,7 +49,6 @@ def collect_address_stats(start_block: int, end_block: int, csv_path: str = "dat
             continue
 
         for tx in txns:
-            # All numeric values like 'value' and 'gasPrice' are also hex strings
             rows.append({
                 "block": bn,
                 "tx_hash": tx['hash'], # Already a hex string

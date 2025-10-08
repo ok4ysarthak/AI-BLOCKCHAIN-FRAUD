@@ -1,4 +1,3 @@
-# backend/web3_setup.py
 import os
 from dotenv import load_dotenv
 from web3 import Web3

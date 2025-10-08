@@ -4,7 +4,7 @@ import json
 import os
 from dotenv import load_dotenv
 from web3 import Web3
-import time
+import numpy as np # <-- 1. IMPORT NUMPY
 
 # --- Page Configuration ---
 st.set_page_config(
@@ -25,7 +25,6 @@ if not RPC_URL:
 w3 = Web3(Web3.HTTPProvider(RPC_URL))
 
 # --- Smart Contract Setup ---
-# Build an absolute path to the ABI file to avoid CWD issues
 try:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir) 
@@ -38,7 +37,7 @@ except FileNotFoundError:
     st.error(f"Contract ABI file not found. The script looked for it at this path: {abi_path}")
     st.stop()
 
-CONTRACT_ADDRESS = "0x367006A3FeF8bd103ddFdB3D741cABe67cad352b"
+CONTRACT_ADDRESS = "0x3747c79AcFAC12C11A885Dd248Bc78B6ABe0159D"
 try:
     contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=contract_abi)
 except Exception as e:
@@ -47,7 +46,6 @@ except Exception as e:
 
 @st.cache_data
 def load_risk_data():
-    """Loads the risk report data from the CSV file."""
     try:
         data_path = os.path.join(project_root, "data", "risk_report.csv")
         df = pd.read_csv(data_path)
@@ -83,14 +81,12 @@ with st.sidebar:
         """
     )
 
-
 # --- Main Page ---
 st.title("AI-Powered Blockchain Fraud Detection")
 st.markdown("An on-chain risk intelligence platform for the Polygon ecosystem.")
 
 df = load_risk_data()
 
-# --- Key Metrics ---
 if df is not None:
     total_flagged = len(df)
     highest_risk = df['risk_score'].max()
@@ -105,7 +101,6 @@ else:
 
 st.markdown("---")
 
-# --- Project Information Expanders ---
 with st.expander("🚀 Project Overview & Use Case"):
     st.markdown(
         """
@@ -131,18 +126,17 @@ with st.expander("💡 Why Store Risk Scores On-Chain?"):
 
 st.markdown("---")
 
-# --- Interactive Risk Report ---
 st.header("Live Risk Analysis")
 
 if df is not None:
     score_range = st.slider(
         'Filter by Risk Score:',
-        min_value=0, max_value=100, value=(50, 100)
+        min_value=0, max_value=100, value=(0, 100)
     )
     
     filtered_df = df[(df['risk_score'] >= score_range[0]) & (df['risk_score'] <= score_range[1])]
 
-    col1, col2 = st.columns([2, 1]) # Make the table column wider
+    col1, col2 = st.columns([2, 1])
 
     with col1:
         st.write(f"Displaying {len(filtered_df)} of {len(df)} flagged addresses:")
@@ -150,13 +144,26 @@ if df is not None:
     
     with col2:
         st.write("Score Distribution")
-        st.bar_chart(filtered_df['risk_score'].value_counts())
+        # --- FIX: Create a proper histogram ---
+        # 2. Define the bins (ranges) for the histogram, e.g., 0-10, 10-20, ...
+        bins = range(0, 101, 10)
+        
+        # 3. Use numpy to calculate the number of addresses in each bin
+        hist_values, bin_edges = np.histogram(filtered_df['risk_score'], bins=bins)
+        
+        # 4. Create a new DataFrame for plotting the histogram
+        hist_df = pd.DataFrame({
+            'Score Range': [f'{bins[i]}-{bins[i+1]}' for i in range(len(bins)-1)],
+            'Number of Addresses': hist_values
+        }).set_index('Score Range')
+        
+        # 5. Display the new, corrected bar chart
+        st.bar_chart(hist_df)
 else:
     st.warning("`data/risk_report.csv` not found. Please generate the report first.")
 
 st.markdown("---")
 
-# --- On-Chain Verification Section ---
 st.header("On-Chain Risk Score Verification")
 st.write("Enter a wallet address to query its current risk score directly from the `RiskRegistry` smart contract.")
 
@@ -193,7 +200,6 @@ if st.button("Check Risk Score on Blockchain"):
             except Exception as e:
                 st.error(f"An error occurred while fetching the score: {e}")
 
-# --- Footer ---
 st.markdown("---")
 st.write("Developed as a proof-of-concept for AI-driven on-chain intelligence.")
 

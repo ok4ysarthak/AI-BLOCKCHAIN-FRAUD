@@ -1,4 +1,3 @@
-# backend/model.py
 import pandas as pd
 import numpy as np
 from sklearn.ensemble import IsolationForest
@@ -16,7 +15,6 @@ def train():
     addresses = df['from']
     X = df.drop(columns=['from'])
 
-    # Replace inf / NaN (possible in std or gap values)
     X = X.replace([np.inf, -np.inf], np.nan).fillna(0)
 
     # Standardise features
@@ -65,7 +63,5 @@ def predict_and_score():
     print(result.head(10))
 
 if __name__ == "__main__":
-    # First run: train model
     train()
-    # Then generate a risk report
     predict_and_score()

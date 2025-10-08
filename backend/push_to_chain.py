@@ -1,4 +1,3 @@
-# backend/push_to_chain.py
 import os, json, time
 from dotenv import load_dotenv
 from web3 import Web3
