@@ -1,0 +1,8 @@
+pandas
+streamlit
+dotenv
+web3
+numpy
+scikit-learn
+joblib
+tqdm
