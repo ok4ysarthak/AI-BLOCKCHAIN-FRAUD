@@ -13,7 +13,7 @@ ABI_PATH = BASE_DIR / "frontend" / "abi" / "RiskRegistry.json"
 with open(ABI_PATH) as f:
     abi = json.load(f)["abi"]
 
-CONTRACT_ADDRESS = "0xYOUR_AMOY_DEPLOYED_RISKREGISTRY_ADDRESS"
+CONTRACT_ADDRESS = "0x2A9720c20755779362AAd30d278D65e9AA4FD598"
 contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=abi)
 
 st.title("🕵️‍♂️ Blockchain Identity Fraud Dashboard")
