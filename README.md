@@ -1,3 +1,5 @@
+Deployed on Streamlit: https://blockchain-fraud-test.streamlit.app/
+
 # 🛡️ AI-Powered On-Chain Fraud Detection
 
 <!-- You can add a project banner/header image here -->
