@@ -14,7 +14,12 @@ with open(ABI_PATH) as f:
     abi = json.load(f)["abi"]
 
 CONTRACT_ADDRESS = "0x2A9720c20755779362AAd30d278D65e9AA4FD598"
-contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=abi)
+contract = w3.eth.contract(address=Web3.to_checksum_address(CONTRACT_ADDRESS), abi=abi)
+
+def to_checksum(addr: str) -> str:
+    if not Web3.is_address(addr):
+        raise ValueError(f"Invalid address: {addr}")
+    return Web3.to_checksum_address(addr)
 
 st.title("🕵️‍♂️ Blockchain Identity Fraud Dashboard")
 
@@ -22,11 +27,12 @@ df = pd.read_csv(BASE_DIR / "data" / "risk_report.csv")
 df["short"] = df["address"].apply(lambda x: f"{x[:6]}…{x[-4:]}")
 chosen = st.selectbox("Pick an address", df["short"])
 
-addr = df.loc[df["short"] == chosen, "address"].values[0]
+addr_raw = df.loc[df["short"] == chosen, "address"].values[0]
+addr = to_checksum(addr_raw)
 onchain_score = contract.functions.getScore(addr).call()
-row = df.loc[df["address"] == addr].iloc[0]
+row = df.loc[df["address"] == addr_raw].iloc[0]
 
-st.subheader(f"Address {addr}")
+st.subheader(f"Address {addr_raw}")
 st.metric("AI‑derived risk (0‑100)", f"{row['risk_score']:.1f}")
 st.metric("On‑chain stored score", f"{onchain_score}")
 

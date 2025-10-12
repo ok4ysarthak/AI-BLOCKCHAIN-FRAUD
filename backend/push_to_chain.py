@@ -10,6 +10,11 @@ account = w3.eth.account.from_key(os.getenv("PRIVATE_KEY"))
 print("Using address:", account.address)
 print("Connected to chain:", w3.is_connected())
 
+def to_checksum(addr: str) -> str:
+    if not Web3.is_address(addr):
+        raise ValueError(f"Invalid address: {addr}")
+    return Web3.to_checksum_address(addr)
+
 BASE_DIR = pathlib.Path(__file__).resolve().parents[1]   # project root
 ABI_PATH = BASE_DIR / "frontend" / "abi" / "RiskRegistry.json"
 
@@ -20,7 +25,7 @@ with open(ABI_PATH) as f:
     abi = json.load(f)["abi"]
 
 CONTRACT_ADDRESS = "0x2A9720c20755779362AAd30d278D65e9AA4FD598"
-contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=abi)
+contract = w3.eth.contract(address=to_checksum(CONTRACT_ADDRESS), abi=abi)
 
 def get_nonce_via_rpc(eth_address: str) -> int:
     response = w3.provider.make_request(
@@ -31,6 +36,7 @@ def get_nonce_via_rpc(eth_address: str) -> int:
 
 # MODIFICATION 1: The function now accepts the nonce as an argument
 def send_score(address: str, score: int, nonce: int):
+    address = to_checksum(address)
     print(f"Sending score {score} for {address[:10]}... with nonce {nonce}")
     txn = contract.functions.setScore(address, score).build_transaction({
         "from": account.address,
