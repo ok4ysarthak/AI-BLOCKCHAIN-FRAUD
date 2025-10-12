@@ -11,13 +11,14 @@ print("Using address:", account.address)
 print("Connected to chain:", w3.is_connected())
 
 BASE_DIR = pathlib.Path(__file__).resolve().parents[1]   # project root
-ABI_PATH = BASE_DIR / "artifacts" / "contracts" / "RiskRegistry.sol" / "RiskRegistry.json"
+ABI_PATH = BASE_DIR / "frontend" / "abi" / "RiskRegistry.json"
 
 if not ABI_PATH.is_file():
     raise FileNotFoundError(f"⚠️  Contract ABI not found at {ABI_PATH}")
 
 with open(ABI_PATH) as f:
     abi = json.load(f)["abi"]
+
 CONTRACT_ADDRESS = "0x2A9720c20755779362AAd30d278D65e9AA4FD598"
 contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=abi)
 
