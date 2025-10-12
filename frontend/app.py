@@ -9,7 +9,7 @@ load_dotenv()
 w3 = Web3(Web3.HTTPProvider(os.getenv("ALCHEMY_API_URL")))
 
 BASE_DIR = pathlib.Path(__file__).resolve().parents[1]   # project root
-ABI_PATH = BASE_DIR / "artifacts" / "contracts" / "RiskRegistry.sol" / "RiskRegistry.json"
+ABI_PATH = BASE_DIR / "frontend" / "abi" / "RiskRegistry.json"
 with open(ABI_PATH) as f:
     abi = json.load(f)["abi"]
 
