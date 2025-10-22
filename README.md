@@ -39,7 +39,6 @@ We've built a system that tackles this problem head-on by combining two powerful
 
 Essentially, we are creating a decentralized, transparent "risk score" for crypto wallets, moving critical security data from opaque, centralized servers onto an open, auditable public ledger.
 
-**Deployed on Streamlit: https://blockchain-fraud-test.streamlit.app/**
 
 ## 🔗 What is Blockchain? (A Simple Guide)
 
